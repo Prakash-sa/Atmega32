@@ -1,0 +1,265 @@
+
+servo.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000160  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000012  00800060  00000160  000001f4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000001  00800072  00800072  00000206  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000206  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000238  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000028  00000000  00000000  00000274  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   000006c7  00000000  00000000  0000029c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 000005d9  00000000  00000000  00000963  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   000002ed  00000000  00000000  00000f3c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000054  00000000  00000000  0000122c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    0000034a  00000000  00000000  00001280  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    000000f3  00000000  00000000  000015ca  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000018  00000000  00000000  000016bd  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+   8:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+   c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  10:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  14:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  18:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  1c:	0c 94 49 00 	jmp	0x92	; 0x92 <__vector_7>
+  20:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  24:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  28:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  2c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  30:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  34:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  38:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  3c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  40:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  44:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  48:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  4c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  50:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	e0 e6       	ldi	r30, 0x60	; 96
+  68:	f1 e0       	ldi	r31, 0x01	; 1
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+  70:	a2 37       	cpi	r26, 0x72	; 114
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
+
+00000076 <__do_clear_bss>:
+  76:	20 e0       	ldi	r18, 0x00	; 0
+  78:	a2 e7       	ldi	r26, 0x72	; 114
+  7a:	b0 e0       	ldi	r27, 0x00	; 0
+  7c:	01 c0       	rjmp	.+2      	; 0x80 <.do_clear_bss_start>
+
+0000007e <.do_clear_bss_loop>:
+  7e:	1d 92       	st	X+, r1
+
+00000080 <.do_clear_bss_start>:
+  80:	a3 37       	cpi	r26, 0x73	; 115
+  82:	b2 07       	cpc	r27, r18
+  84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
+  86:	0e 94 7a 00 	call	0xf4	; 0xf4 <main>
+  8a:	0c 94 ae 00 	jmp	0x15c	; 0x15c <_exit>
+
+0000008e <__bad_interrupt>:
+  8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000092 <__vector_7>:
+
+*/
+unsigned int servo[9] = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 6000};
+
+ISR(TIMER1_COMPA_vect)
+{
+  92:	1f 92       	push	r1
+  94:	0f 92       	push	r0
+  96:	0f b6       	in	r0, 0x3f	; 63
+  98:	0f 92       	push	r0
+  9a:	11 24       	eor	r1, r1
+  9c:	8f 93       	push	r24
+  9e:	9f 93       	push	r25
+  a0:	ef 93       	push	r30
+  a2:	ff 93       	push	r31
+	static unsigned char servo_num;
+
+	PORTB = (1<<servo_num);          // end pulse for servo (n), start pulse for servo (n+1)
+  a4:	81 e0       	ldi	r24, 0x01	; 1
+  a6:	90 e0       	ldi	r25, 0x00	; 0
+  a8:	00 90 72 00 	lds	r0, 0x0072	; 0x800072 <__data_end>
+  ac:	02 c0       	rjmp	.+4      	; 0xb2 <__vector_7+0x20>
+  ae:	88 0f       	add	r24, r24
+  b0:	99 1f       	adc	r25, r25
+  b2:	0a 94       	dec	r0
+  b4:	e2 f7       	brpl	.-8      	; 0xae <__vector_7+0x1c>
+  b6:	88 bb       	out	0x18, r24	; 24
+	OCR1A = servo[servo_num];        // set width of pulse
+  b8:	e0 91 72 00 	lds	r30, 0x0072	; 0x800072 <__data_end>
+  bc:	f0 e0       	ldi	r31, 0x00	; 0
+  be:	ee 0f       	add	r30, r30
+  c0:	ff 1f       	adc	r31, r31
+  c2:	e0 5a       	subi	r30, 0xA0	; 160
+  c4:	ff 4f       	sbci	r31, 0xFF	; 255
+  c6:	80 81       	ld	r24, Z
+  c8:	91 81       	ldd	r25, Z+1	; 0x01
+  ca:	9b bd       	out	0x2b, r25	; 43
+  cc:	8a bd       	out	0x2a, r24	; 42
+	servo_num++;                     // prepare next servo
+  ce:	80 91 72 00 	lds	r24, 0x0072	; 0x800072 <__data_end>
+  d2:	8f 5f       	subi	r24, 0xFF	; 255
+	if(servo_num > 8) servo_num = 0; // again from servo 0;
+  d4:	89 30       	cpi	r24, 0x09	; 9
+  d6:	18 f4       	brcc	.+6      	; 0xde <__vector_7+0x4c>
+{
+	static unsigned char servo_num;
+
+	PORTB = (1<<servo_num);          // end pulse for servo (n), start pulse for servo (n+1)
+	OCR1A = servo[servo_num];        // set width of pulse
+	servo_num++;                     // prepare next servo
+  d8:	80 93 72 00 	sts	0x0072, r24	; 0x800072 <__data_end>
+  dc:	02 c0       	rjmp	.+4      	; 0xe2 <__vector_7+0x50>
+	if(servo_num > 8) servo_num = 0; // again from servo 0;
+  de:	10 92 72 00 	sts	0x0072, r1	; 0x800072 <__data_end>
+}
+  e2:	ff 91       	pop	r31
+  e4:	ef 91       	pop	r30
+  e6:	9f 91       	pop	r25
+  e8:	8f 91       	pop	r24
+  ea:	0f 90       	pop	r0
+  ec:	0f be       	out	0x3f, r0	; 63
+  ee:	0f 90       	pop	r0
+  f0:	1f 90       	pop	r1
+  f2:	18 95       	reti
+
+000000f4 <main>:
+
+
+int main (void)
+{
+	DDRB = 255;                        // portb output
+  f4:	8f ef       	ldi	r24, 0xFF	; 255
+  f6:	87 bb       	out	0x17, r24	; 23
+	TCCR1B |= (1<<WGM12) | (1<<CS11);  // pwm mode 4,CTC, prescale=8
+  f8:	8e b5       	in	r24, 0x2e	; 46
+  fa:	8a 60       	ori	r24, 0x0A	; 10
+  fc:	8e bd       	out	0x2e, r24	; 46
+	TIMSK |= (1<<OCIE1A);             // enable T1_compareA interrupt
+  fe:	89 b7       	in	r24, 0x39	; 57
+ 100:	80 61       	ori	r24, 0x10	; 16
+ 102:	89 bf       	out	0x39, r24	; 57
+	TCNT1 = 65530;
+ 104:	8a ef       	ldi	r24, 0xFA	; 250
+ 106:	9f ef       	ldi	r25, 0xFF	; 255
+ 108:	9d bd       	out	0x2d, r25	; 45
+ 10a:	8c bd       	out	0x2c, r24	; 44
+	sei();
+ 10c:	78 94       	sei
+
+	// test
+	for(;;)
+	{
+		servo[0] = 1000;          // servos 0 and 1 left
+ 10e:	e0 e6       	ldi	r30, 0x60	; 96
+ 110:	f0 e0       	ldi	r31, 0x00	; 0
+ 112:	48 ee       	ldi	r20, 0xE8	; 232
+ 114:	53 e0       	ldi	r21, 0x03	; 3
+		servo[1] = 1000;
+		_delay_ms(200);
+
+		servo[0] = 1500;          // servos 0 and 1 center
+ 116:	2c ed       	ldi	r18, 0xDC	; 220
+ 118:	35 e0       	ldi	r19, 0x05	; 5
+		servo[1] = 1500;
+		_delay_ms(200);
+
+		servo[0] = 2000;          // servos 0 and 1 right
+ 11a:	80 ed       	ldi	r24, 0xD0	; 208
+ 11c:	97 e0       	ldi	r25, 0x07	; 7
+	sei();
+
+	// test
+	for(;;)
+	{
+		servo[0] = 1000;          // servos 0 and 1 left
+ 11e:	51 83       	std	Z+1, r21	; 0x01
+ 120:	40 83       	st	Z, r20
+		servo[1] = 1000;
+ 122:	53 83       	std	Z+3, r21	; 0x03
+ 124:	42 83       	std	Z+2, r20	; 0x02
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 126:	af e4       	ldi	r26, 0x4F	; 79
+ 128:	b3 ec       	ldi	r27, 0xC3	; 195
+ 12a:	11 97       	sbiw	r26, 0x01	; 1
+ 12c:	f1 f7       	brne	.-4      	; 0x12a <main+0x36>
+ 12e:	00 c0       	rjmp	.+0      	; 0x130 <main+0x3c>
+ 130:	00 00       	nop
+		_delay_ms(200);
+
+		servo[0] = 1500;          // servos 0 and 1 center
+ 132:	31 83       	std	Z+1, r19	; 0x01
+ 134:	20 83       	st	Z, r18
+		servo[1] = 1500;
+ 136:	33 83       	std	Z+3, r19	; 0x03
+ 138:	22 83       	std	Z+2, r18	; 0x02
+ 13a:	af e4       	ldi	r26, 0x4F	; 79
+ 13c:	b3 ec       	ldi	r27, 0xC3	; 195
+ 13e:	11 97       	sbiw	r26, 0x01	; 1
+ 140:	f1 f7       	brne	.-4      	; 0x13e <main+0x4a>
+ 142:	00 c0       	rjmp	.+0      	; 0x144 <main+0x50>
+ 144:	00 00       	nop
+		_delay_ms(200);
+
+		servo[0] = 2000;          // servos 0 and 1 right
+ 146:	91 83       	std	Z+1, r25	; 0x01
+ 148:	80 83       	st	Z, r24
+		servo[1] = 2000;
+ 14a:	93 83       	std	Z+3, r25	; 0x03
+ 14c:	82 83       	std	Z+2, r24	; 0x02
+ 14e:	af e4       	ldi	r26, 0x4F	; 79
+ 150:	b3 ec       	ldi	r27, 0xC3	; 195
+ 152:	11 97       	sbiw	r26, 0x01	; 1
+ 154:	f1 f7       	brne	.-4      	; 0x152 <main+0x5e>
+ 156:	00 c0       	rjmp	.+0      	; 0x158 <main+0x64>
+ 158:	00 00       	nop
+ 15a:	e1 cf       	rjmp	.-62     	; 0x11e <main+0x2a>
+
+0000015c <_exit>:
+ 15c:	f8 94       	cli
+
+0000015e <__stop_program>:
+ 15e:	ff cf       	rjmp	.-2      	; 0x15e <__stop_program>

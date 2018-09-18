@@ -1,0 +1,696 @@
+
+pca9685.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000048c  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000004  00800060  0000048c  00000500  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000504  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000534  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 000000a0  00000000  00000000  00000570  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   000010a8  00000000  00000000  00000610  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000753  00000000  00000000  000016b8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000006ae  00000000  00000000  00001e0b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000208  00000000  00000000  000024bc  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000469  00000000  00000000  000026c4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000c20  00000000  00000000  00002b2d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 000000c0  00000000  00000000  0000374d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   8:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  10:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  14:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  18:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  1c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  20:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  24:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  28:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  2c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  30:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  34:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  38:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  3c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  40:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  44:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  48:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  4c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  50:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	ec e8       	ldi	r30, 0x8C	; 140
+  68:	f4 e0       	ldi	r31, 0x04	; 4
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+  70:	a4 36       	cpi	r26, 0x64	; 100
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
+  76:	0e 94 02 01 	call	0x204	; 0x204 <main>
+  7a:	0c 94 44 02 	jmp	0x488	; 0x488 <_exit>
+
+0000007e <__bad_interrupt>:
+  7e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000082 <i2c_init>:
+}
+
+void i2c_stop(void)
+{
+	// transmit STOP condition
+	TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWSTO);
+  82:	84 b3       	in	r24, 0x14	; 20
+  84:	84 bb       	out	0x14, r24	; 20
+  86:	8d ef       	ldi	r24, 0xFD	; 253
+  88:	80 b9       	out	0x00, r24	; 0
+  8a:	08 95       	ret
+
+0000008c <i2c_start>:
+  8c:	16 be       	out	0x36, r1	; 54
+  8e:	94 ea       	ldi	r25, 0xA4	; 164
+  90:	96 bf       	out	0x36, r25	; 54
+  92:	06 b6       	in	r0, 0x36	; 54
+  94:	07 fe       	sbrs	r0, 7
+  96:	fd cf       	rjmp	.-6      	; 0x92 <i2c_start+0x6>
+  98:	91 b1       	in	r25, 0x01	; 1
+  9a:	98 7f       	andi	r25, 0xF8	; 248
+  9c:	98 30       	cpi	r25, 0x08	; 8
+  9e:	79 f4       	brne	.+30     	; 0xbe <i2c_start+0x32>
+  a0:	83 b9       	out	0x03, r24	; 3
+  a2:	84 e8       	ldi	r24, 0x84	; 132
+  a4:	86 bf       	out	0x36, r24	; 54
+  a6:	06 b6       	in	r0, 0x36	; 54
+  a8:	07 fe       	sbrs	r0, 7
+  aa:	fd cf       	rjmp	.-6      	; 0xa6 <i2c_start+0x1a>
+  ac:	91 b1       	in	r25, 0x01	; 1
+  ae:	98 7f       	andi	r25, 0xF8	; 248
+  b0:	98 31       	cpi	r25, 0x18	; 24
+  b2:	39 f0       	breq	.+14     	; 0xc2 <i2c_start+0x36>
+  b4:	81 e0       	ldi	r24, 0x01	; 1
+  b6:	90 34       	cpi	r25, 0x40	; 64
+  b8:	29 f4       	brne	.+10     	; 0xc4 <i2c_start+0x38>
+  ba:	80 e0       	ldi	r24, 0x00	; 0
+  bc:	08 95       	ret
+  be:	81 e0       	ldi	r24, 0x01	; 1
+  c0:	08 95       	ret
+  c2:	80 e0       	ldi	r24, 0x00	; 0
+  c4:	08 95       	ret
+
+000000c6 <i2c_write>:
+  c6:	83 b9       	out	0x03, r24	; 3
+  c8:	84 e8       	ldi	r24, 0x84	; 132
+  ca:	86 bf       	out	0x36, r24	; 54
+  cc:	06 b6       	in	r0, 0x36	; 54
+  ce:	07 fe       	sbrs	r0, 7
+  d0:	fd cf       	rjmp	.-6      	; 0xcc <i2c_write+0x6>
+  d2:	91 b1       	in	r25, 0x01	; 1
+  d4:	98 7f       	andi	r25, 0xF8	; 248
+  d6:	81 e0       	ldi	r24, 0x01	; 1
+  d8:	98 32       	cpi	r25, 0x28	; 40
+  da:	09 f4       	brne	.+2      	; 0xde <i2c_write+0x18>
+  dc:	80 e0       	ldi	r24, 0x00	; 0
+  de:	08 95       	ret
+
+000000e0 <PCA9685writeLED>:
+  e0:	ef 92       	push	r14
+  e2:	ff 92       	push	r15
+  e4:	0f 93       	push	r16
+  e6:	1f 93       	push	r17
+  e8:	cf 93       	push	r28
+  ea:	df 93       	push	r29
+  ec:	80 31       	cpi	r24, 0x10	; 16
+  ee:	91 05       	cpc	r25, r1
+  f0:	e0 f4       	brcc	.+56     	; 0x12a <PCA9685writeLED+0x4a>
+  f2:	15 2f       	mov	r17, r21
+  f4:	04 2f       	mov	r16, r20
+  f6:	f7 2e       	mov	r15, r23
+  f8:	e6 2e       	mov	r14, r22
+  fa:	ec 01       	movw	r28, r24
+  fc:	80 e8       	ldi	r24, 0x80	; 128
+  fe:	0e 94 46 00 	call	0x8c	; 0x8c <i2c_start>
+ 102:	8c 2f       	mov	r24, r28
+ 104:	88 0f       	add	r24, r24
+ 106:	88 0f       	add	r24, r24
+ 108:	8a 5f       	subi	r24, 0xFA	; 250
+ 10a:	0e 94 63 00 	call	0xc6	; 0xc6 <i2c_write>
+ 10e:	8e 2d       	mov	r24, r14
+ 110:	0e 94 63 00 	call	0xc6	; 0xc6 <i2c_write>
+ 114:	8f 2d       	mov	r24, r15
+ 116:	0e 94 63 00 	call	0xc6	; 0xc6 <i2c_write>
+ 11a:	80 2f       	mov	r24, r16
+ 11c:	0e 94 63 00 	call	0xc6	; 0xc6 <i2c_write>
+ 120:	81 2f       	mov	r24, r17
+ 122:	0e 94 63 00 	call	0xc6	; 0xc6 <i2c_write>
+ 126:	84 e9       	ldi	r24, 0x94	; 148
+ 128:	86 bf       	out	0x36, r24	; 54
+ 12a:	df 91       	pop	r29
+ 12c:	cf 91       	pop	r28
+ 12e:	1f 91       	pop	r17
+ 130:	0f 91       	pop	r16
+ 132:	ff 90       	pop	r15
+ 134:	ef 90       	pop	r14
+ 136:	08 95       	ret
+
+00000138 <PCA9685setLEDOn>:
+ 138:	40 e0       	ldi	r20, 0x00	; 0
+ 13a:	50 e0       	ldi	r21, 0x00	; 0
+ 13c:	60 e0       	ldi	r22, 0x00	; 0
+ 13e:	70 e1       	ldi	r23, 0x10	; 16
+ 140:	0e 94 70 00 	call	0xe0	; 0xe0 <PCA9685writeLED>
+ 144:	08 95       	ret
+
+00000146 <PCA9685setLEDOff>:
+ 146:	40 e0       	ldi	r20, 0x00	; 0
+ 148:	50 e1       	ldi	r21, 0x10	; 16
+ 14a:	60 e0       	ldi	r22, 0x00	; 0
+ 14c:	70 e0       	ldi	r23, 0x00	; 0
+ 14e:	0e 94 70 00 	call	0xe0	; 0xe0 <PCA9685writeLED>
+ 152:	08 95       	ret
+
+00000154 <PCA9685setLEDDimmed>:
+ 154:	0f 93       	push	r16
+ 156:	1f 93       	push	r17
+ 158:	cf 93       	push	r28
+ 15a:	8c 01       	movw	r16, r24
+ 15c:	c6 2f       	mov	r28, r22
+ 15e:	61 11       	cpse	r22, r1
+ 160:	03 c0       	rjmp	.+6      	; 0x168 <PCA9685setLEDDimmed+0x14>
+ 162:	0e 94 a3 00 	call	0x146	; 0x146 <PCA9685setLEDOff>
+ 166:	16 c0       	rjmp	.+44     	; 0x194 <PCA9685setLEDDimmed+0x40>
+ 168:	64 36       	cpi	r22, 0x64	; 100
+ 16a:	18 f0       	brcs	.+6      	; 0x172 <PCA9685setLEDDimmed+0x1e>
+ 16c:	0e 94 9c 00 	call	0x138	; 0x138 <PCA9685setLEDOn>
+ 170:	11 c0       	rjmp	.+34     	; 0x194 <PCA9685setLEDDimmed+0x40>
+ 172:	80 e0       	ldi	r24, 0x00	; 0
+ 174:	90 e1       	ldi	r25, 0x10	; 16
+ 176:	0e 94 d6 01 	call	0x3ac	; 0x3ac <srand>
+ 17a:	0e 94 d1 01 	call	0x3a2	; 0x3a2 <rand>
+ 17e:	ac 01       	movw	r20, r24
+ 180:	29 e2       	ldi	r18, 0x29	; 41
+ 182:	c2 9f       	mul	r28, r18
+ 184:	40 0d       	add	r20, r0
+ 186:	51 1d       	adc	r21, r1
+ 188:	11 24       	eor	r1, r1
+ 18a:	5f 70       	andi	r21, 0x0F	; 15
+ 18c:	bc 01       	movw	r22, r24
+ 18e:	c8 01       	movw	r24, r16
+ 190:	0e 94 70 00 	call	0xe0	; 0xe0 <PCA9685writeLED>
+ 194:	cf 91       	pop	r28
+ 196:	1f 91       	pop	r17
+ 198:	0f 91       	pop	r16
+ 19a:	08 95       	ret
+
+0000019c <PCA9685writeRegister>:
+ 19c:	cf 93       	push	r28
+ 19e:	df 93       	push	r29
+ 1a0:	d8 2f       	mov	r29, r24
+ 1a2:	c6 2f       	mov	r28, r22
+ 1a4:	80 e8       	ldi	r24, 0x80	; 128
+ 1a6:	0e 94 46 00 	call	0x8c	; 0x8c <i2c_start>
+ 1aa:	8d 2f       	mov	r24, r29
+ 1ac:	0e 94 63 00 	call	0xc6	; 0xc6 <i2c_write>
+ 1b0:	8c 2f       	mov	r24, r28
+ 1b2:	0e 94 63 00 	call	0xc6	; 0xc6 <i2c_write>
+ 1b6:	84 e9       	ldi	r24, 0x94	; 148
+ 1b8:	86 bf       	out	0x36, r24	; 54
+ 1ba:	df 91       	pop	r29
+ 1bc:	cf 91       	pop	r28
+ 1be:	08 95       	ret
+
+000001c0 <PCA9685_init>:
+ 1c0:	80 e4       	ldi	r24, 0x40	; 64
+ 1c2:	0e 94 46 00 	call	0x8c	; 0x8c <i2c_start>
+ 1c6:	87 ea       	ldi	r24, 0xA7	; 167
+ 1c8:	91 e6       	ldi	r25, 0x61	; 97
+ 1ca:	01 97       	sbiw	r24, 0x01	; 1
+ 1cc:	f1 f7       	brne	.-4      	; 0x1ca <PCA9685_init+0xa>
+ 1ce:	00 c0       	rjmp	.+0      	; 0x1d0 <PCA9685_init+0x10>
+ 1d0:	00 00       	nop
+ 1d2:	61 e0       	ldi	r22, 0x01	; 1
+ 1d4:	70 e0       	ldi	r23, 0x00	; 0
+ 1d6:	80 e0       	ldi	r24, 0x00	; 0
+ 1d8:	90 e0       	ldi	r25, 0x00	; 0
+ 1da:	0e 94 ce 00 	call	0x19c	; 0x19c <PCA9685writeRegister>
+ 1de:	87 ea       	ldi	r24, 0xA7	; 167
+ 1e0:	91 e6       	ldi	r25, 0x61	; 97
+ 1e2:	01 97       	sbiw	r24, 0x01	; 1
+ 1e4:	f1 f7       	brne	.-4      	; 0x1e2 <PCA9685_init+0x22>
+ 1e6:	00 c0       	rjmp	.+0      	; 0x1e8 <PCA9685_init+0x28>
+ 1e8:	00 00       	nop
+ 1ea:	61 ea       	ldi	r22, 0xA1	; 161
+ 1ec:	70 e0       	ldi	r23, 0x00	; 0
+ 1ee:	80 e0       	ldi	r24, 0x00	; 0
+ 1f0:	90 e0       	ldi	r25, 0x00	; 0
+ 1f2:	0e 94 ce 00 	call	0x19c	; 0x19c <PCA9685writeRegister>
+ 1f6:	60 e1       	ldi	r22, 0x10	; 16
+ 1f8:	70 e0       	ldi	r23, 0x00	; 0
+ 1fa:	81 e0       	ldi	r24, 0x01	; 1
+ 1fc:	90 e0       	ldi	r25, 0x00	; 0
+ 1fe:	0e 94 ce 00 	call	0x19c	; 0x19c <PCA9685writeRegister>
+ 202:	08 95       	ret
+
+00000204 <main>:
+	
+    signed char j = 0;
+    signed int i = 0;
+    unsigned int v = 0;
+    
+	i2c_init();
+ 204:	0e 94 41 00 	call	0x82	; 0x82 <i2c_init>
+	PCA9685_init();
+ 208:	0e 94 e0 00 	call	0x1c0	; 0x1c0 <PCA9685_init>
+    
+    while(1)
+    {
+		
+
+			for(int i=0; i<6; i++)  {
+ 20c:	c0 e0       	ldi	r28, 0x00	; 0
+ 20e:	d0 e0       	ldi	r29, 0x00	; 0
+				PCA9685setLEDDimmed(i,50);
+ 210:	62 e3       	ldi	r22, 0x32	; 50
+ 212:	ce 01       	movw	r24, r28
+ 214:	0e 94 aa 00 	call	0x154	; 0x154 <PCA9685setLEDDimmed>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 218:	2f e7       	ldi	r18, 0x7F	; 127
+ 21a:	84 e8       	ldi	r24, 0x84	; 132
+ 21c:	9e e1       	ldi	r25, 0x1E	; 30
+ 21e:	21 50       	subi	r18, 0x01	; 1
+ 220:	80 40       	sbci	r24, 0x00	; 0
+ 222:	90 40       	sbci	r25, 0x00	; 0
+ 224:	e1 f7       	brne	.-8      	; 0x21e <main+0x1a>
+ 226:	00 c0       	rjmp	.+0      	; 0x228 <main+0x24>
+ 228:	00 00       	nop
+    
+    while(1)
+    {
+		
+
+			for(int i=0; i<6; i++)  {
+ 22a:	21 96       	adiw	r28, 0x01	; 1
+ 22c:	c6 30       	cpi	r28, 0x06	; 6
+ 22e:	d1 05       	cpc	r29, r1
+ 230:	79 f7       	brne	.-34     	; 0x210 <main+0xc>
+ 232:	c0 e0       	ldi	r28, 0x00	; 0
+ 234:	d0 e0       	ldi	r29, 0x00	; 0
+				PCA9685setLEDDimmed(i,50);
+				_delay_ms(10000);
+			}
+			
+			for(int i=0; i<6; i++)  {
+				PCA9685setLEDDimmed(i,70);
+ 236:	66 e4       	ldi	r22, 0x46	; 70
+ 238:	ce 01       	movw	r24, r28
+ 23a:	0e 94 aa 00 	call	0x154	; 0x154 <PCA9685setLEDDimmed>
+ 23e:	2f e3       	ldi	r18, 0x3F	; 63
+ 240:	8d e0       	ldi	r24, 0x0D	; 13
+ 242:	93 e0       	ldi	r25, 0x03	; 3
+ 244:	21 50       	subi	r18, 0x01	; 1
+ 246:	80 40       	sbci	r24, 0x00	; 0
+ 248:	90 40       	sbci	r25, 0x00	; 0
+ 24a:	e1 f7       	brne	.-8      	; 0x244 <main+0x40>
+ 24c:	00 c0       	rjmp	.+0      	; 0x24e <main+0x4a>
+ 24e:	00 00       	nop
+			for(int i=0; i<6; i++)  {
+				PCA9685setLEDDimmed(i,50);
+				_delay_ms(10000);
+			}
+			
+			for(int i=0; i<6; i++)  {
+ 250:	21 96       	adiw	r28, 0x01	; 1
+ 252:	c6 30       	cpi	r28, 0x06	; 6
+ 254:	d1 05       	cpc	r29, r1
+ 256:	79 f7       	brne	.-34     	; 0x236 <main+0x32>
+ 258:	c0 e0       	ldi	r28, 0x00	; 0
+ 25a:	d0 e0       	ldi	r29, 0x00	; 0
+				PCA9685setLEDDimmed(i,70);
+				_delay_ms(1000);
+			}
+			for(int i=0; i<6; i++)  {
+				PCA9685writeLED(i,2000,4096);
+ 25c:	40 e0       	ldi	r20, 0x00	; 0
+ 25e:	50 e1       	ldi	r21, 0x10	; 16
+ 260:	60 ed       	ldi	r22, 0xD0	; 208
+ 262:	77 e0       	ldi	r23, 0x07	; 7
+ 264:	ce 01       	movw	r24, r28
+ 266:	0e 94 70 00 	call	0xe0	; 0xe0 <PCA9685writeLED>
+ 26a:	2f e3       	ldi	r18, 0x3F	; 63
+ 26c:	8d e0       	ldi	r24, 0x0D	; 13
+ 26e:	93 e0       	ldi	r25, 0x03	; 3
+ 270:	21 50       	subi	r18, 0x01	; 1
+ 272:	80 40       	sbci	r24, 0x00	; 0
+ 274:	90 40       	sbci	r25, 0x00	; 0
+ 276:	e1 f7       	brne	.-8      	; 0x270 <main+0x6c>
+ 278:	00 c0       	rjmp	.+0      	; 0x27a <main+0x76>
+ 27a:	00 00       	nop
+			
+			for(int i=0; i<6; i++)  {
+				PCA9685setLEDDimmed(i,70);
+				_delay_ms(1000);
+			}
+			for(int i=0; i<6; i++)  {
+ 27c:	21 96       	adiw	r28, 0x01	; 1
+ 27e:	c6 30       	cpi	r28, 0x06	; 6
+ 280:	d1 05       	cpc	r29, r1
+ 282:	61 f7       	brne	.-40     	; 0x25c <main+0x58>
+ 284:	c0 e0       	ldi	r28, 0x00	; 0
+ 286:	d0 e0       	ldi	r29, 0x00	; 0
+				PCA9685writeLED(i,2000,4096);
+				_delay_ms(1000);
+			}
+			for(int i=0; i<6; i++)  {
+				PCA9685writeLED(i,2500,4096);
+ 288:	40 e0       	ldi	r20, 0x00	; 0
+ 28a:	50 e1       	ldi	r21, 0x10	; 16
+ 28c:	64 ec       	ldi	r22, 0xC4	; 196
+ 28e:	79 e0       	ldi	r23, 0x09	; 9
+ 290:	ce 01       	movw	r24, r28
+ 292:	0e 94 70 00 	call	0xe0	; 0xe0 <PCA9685writeLED>
+ 296:	2f e3       	ldi	r18, 0x3F	; 63
+ 298:	8d e0       	ldi	r24, 0x0D	; 13
+ 29a:	93 e0       	ldi	r25, 0x03	; 3
+ 29c:	21 50       	subi	r18, 0x01	; 1
+ 29e:	80 40       	sbci	r24, 0x00	; 0
+ 2a0:	90 40       	sbci	r25, 0x00	; 0
+ 2a2:	e1 f7       	brne	.-8      	; 0x29c <main+0x98>
+ 2a4:	00 c0       	rjmp	.+0      	; 0x2a6 <main+0xa2>
+ 2a6:	00 00       	nop
+			}
+			for(int i=0; i<6; i++)  {
+				PCA9685writeLED(i,2000,4096);
+				_delay_ms(1000);
+			}
+			for(int i=0; i<6; i++)  {
+ 2a8:	21 96       	adiw	r28, 0x01	; 1
+ 2aa:	c6 30       	cpi	r28, 0x06	; 6
+ 2ac:	d1 05       	cpc	r29, r1
+ 2ae:	61 f7       	brne	.-40     	; 0x288 <main+0x84>
+ 2b0:	c0 e0       	ldi	r28, 0x00	; 0
+ 2b2:	d0 e0       	ldi	r29, 0x00	; 0
+				PCA9685writeLED(i,2500,4096);
+				_delay_ms(1000);
+			}
+			for(int i=0; i<6; i++)  {
+				PCA9685writeLED(i,3000,4096);
+ 2b4:	40 e0       	ldi	r20, 0x00	; 0
+ 2b6:	50 e1       	ldi	r21, 0x10	; 16
+ 2b8:	68 eb       	ldi	r22, 0xB8	; 184
+ 2ba:	7b e0       	ldi	r23, 0x0B	; 11
+ 2bc:	ce 01       	movw	r24, r28
+ 2be:	0e 94 70 00 	call	0xe0	; 0xe0 <PCA9685writeLED>
+ 2c2:	2f e3       	ldi	r18, 0x3F	; 63
+ 2c4:	8d e0       	ldi	r24, 0x0D	; 13
+ 2c6:	93 e0       	ldi	r25, 0x03	; 3
+ 2c8:	21 50       	subi	r18, 0x01	; 1
+ 2ca:	80 40       	sbci	r24, 0x00	; 0
+ 2cc:	90 40       	sbci	r25, 0x00	; 0
+ 2ce:	e1 f7       	brne	.-8      	; 0x2c8 <main+0xc4>
+ 2d0:	00 c0       	rjmp	.+0      	; 0x2d2 <main+0xce>
+ 2d2:	00 00       	nop
+			}
+			for(int i=0; i<6; i++)  {
+				PCA9685writeLED(i,2500,4096);
+				_delay_ms(1000);
+			}
+			for(int i=0; i<6; i++)  {
+ 2d4:	21 96       	adiw	r28, 0x01	; 1
+ 2d6:	c6 30       	cpi	r28, 0x06	; 6
+ 2d8:	d1 05       	cpc	r29, r1
+ 2da:	61 f7       	brne	.-40     	; 0x2b4 <main+0xb0>
+ 2dc:	c0 e0       	ldi	r28, 0x00	; 0
+ 2de:	d0 e0       	ldi	r29, 0x00	; 0
+				PCA9685writeLED(i,3000,4096);
+				_delay_ms(1000);
+			}
+			for(int i=0; i<6; i++)  {
+				PCA9685writeLED(i,4000,4096);
+ 2e0:	40 e0       	ldi	r20, 0x00	; 0
+ 2e2:	50 e1       	ldi	r21, 0x10	; 16
+ 2e4:	60 ea       	ldi	r22, 0xA0	; 160
+ 2e6:	7f e0       	ldi	r23, 0x0F	; 15
+ 2e8:	ce 01       	movw	r24, r28
+ 2ea:	0e 94 70 00 	call	0xe0	; 0xe0 <PCA9685writeLED>
+ 2ee:	2f e3       	ldi	r18, 0x3F	; 63
+ 2f0:	8d e0       	ldi	r24, 0x0D	; 13
+ 2f2:	93 e0       	ldi	r25, 0x03	; 3
+ 2f4:	21 50       	subi	r18, 0x01	; 1
+ 2f6:	80 40       	sbci	r24, 0x00	; 0
+ 2f8:	90 40       	sbci	r25, 0x00	; 0
+ 2fa:	e1 f7       	brne	.-8      	; 0x2f4 <main+0xf0>
+ 2fc:	00 c0       	rjmp	.+0      	; 0x2fe <main+0xfa>
+ 2fe:	00 00       	nop
+			}
+			for(int i=0; i<6; i++)  {
+				PCA9685writeLED(i,3000,4096);
+				_delay_ms(1000);
+			}
+			for(int i=0; i<6; i++)  {
+ 300:	21 96       	adiw	r28, 0x01	; 1
+ 302:	c6 30       	cpi	r28, 0x06	; 6
+ 304:	d1 05       	cpc	r29, r1
+ 306:	61 f7       	brne	.-40     	; 0x2e0 <main+0xdc>
+ 308:	81 cf       	rjmp	.-254    	; 0x20c <main+0x8>
+
+0000030a <do_rand>:
+ 30a:	8f 92       	push	r8
+ 30c:	9f 92       	push	r9
+ 30e:	af 92       	push	r10
+ 310:	bf 92       	push	r11
+ 312:	cf 92       	push	r12
+ 314:	df 92       	push	r13
+ 316:	ef 92       	push	r14
+ 318:	ff 92       	push	r15
+ 31a:	cf 93       	push	r28
+ 31c:	df 93       	push	r29
+ 31e:	ec 01       	movw	r28, r24
+ 320:	68 81       	ld	r22, Y
+ 322:	79 81       	ldd	r23, Y+1	; 0x01
+ 324:	8a 81       	ldd	r24, Y+2	; 0x02
+ 326:	9b 81       	ldd	r25, Y+3	; 0x03
+ 328:	61 15       	cp	r22, r1
+ 32a:	71 05       	cpc	r23, r1
+ 32c:	81 05       	cpc	r24, r1
+ 32e:	91 05       	cpc	r25, r1
+ 330:	21 f4       	brne	.+8      	; 0x33a <do_rand+0x30>
+ 332:	64 e2       	ldi	r22, 0x24	; 36
+ 334:	79 ed       	ldi	r23, 0xD9	; 217
+ 336:	8b e5       	ldi	r24, 0x5B	; 91
+ 338:	97 e0       	ldi	r25, 0x07	; 7
+ 33a:	2d e1       	ldi	r18, 0x1D	; 29
+ 33c:	33 ef       	ldi	r19, 0xF3	; 243
+ 33e:	41 e0       	ldi	r20, 0x01	; 1
+ 340:	50 e0       	ldi	r21, 0x00	; 0
+ 342:	0e 94 e1 01 	call	0x3c2	; 0x3c2 <__divmodsi4>
+ 346:	49 01       	movw	r8, r18
+ 348:	5a 01       	movw	r10, r20
+ 34a:	9b 01       	movw	r18, r22
+ 34c:	ac 01       	movw	r20, r24
+ 34e:	a7 ea       	ldi	r26, 0xA7	; 167
+ 350:	b1 e4       	ldi	r27, 0x41	; 65
+ 352:	0e 94 00 02 	call	0x400	; 0x400 <__muluhisi3>
+ 356:	6b 01       	movw	r12, r22
+ 358:	7c 01       	movw	r14, r24
+ 35a:	ac ee       	ldi	r26, 0xEC	; 236
+ 35c:	b4 ef       	ldi	r27, 0xF4	; 244
+ 35e:	a5 01       	movw	r20, r10
+ 360:	94 01       	movw	r18, r8
+ 362:	0e 94 0e 02 	call	0x41c	; 0x41c <__mulohisi3>
+ 366:	dc 01       	movw	r26, r24
+ 368:	cb 01       	movw	r24, r22
+ 36a:	8c 0d       	add	r24, r12
+ 36c:	9d 1d       	adc	r25, r13
+ 36e:	ae 1d       	adc	r26, r14
+ 370:	bf 1d       	adc	r27, r15
+ 372:	b7 ff       	sbrs	r27, 7
+ 374:	03 c0       	rjmp	.+6      	; 0x37c <do_rand+0x72>
+ 376:	01 97       	sbiw	r24, 0x01	; 1
+ 378:	a1 09       	sbc	r26, r1
+ 37a:	b0 48       	sbci	r27, 0x80	; 128
+ 37c:	88 83       	st	Y, r24
+ 37e:	99 83       	std	Y+1, r25	; 0x01
+ 380:	aa 83       	std	Y+2, r26	; 0x02
+ 382:	bb 83       	std	Y+3, r27	; 0x03
+ 384:	9f 77       	andi	r25, 0x7F	; 127
+ 386:	df 91       	pop	r29
+ 388:	cf 91       	pop	r28
+ 38a:	ff 90       	pop	r15
+ 38c:	ef 90       	pop	r14
+ 38e:	df 90       	pop	r13
+ 390:	cf 90       	pop	r12
+ 392:	bf 90       	pop	r11
+ 394:	af 90       	pop	r10
+ 396:	9f 90       	pop	r9
+ 398:	8f 90       	pop	r8
+ 39a:	08 95       	ret
+
+0000039c <rand_r>:
+ 39c:	0e 94 85 01 	call	0x30a	; 0x30a <do_rand>
+ 3a0:	08 95       	ret
+
+000003a2 <rand>:
+ 3a2:	80 e6       	ldi	r24, 0x60	; 96
+ 3a4:	90 e0       	ldi	r25, 0x00	; 0
+ 3a6:	0e 94 85 01 	call	0x30a	; 0x30a <do_rand>
+ 3aa:	08 95       	ret
+
+000003ac <srand>:
+ 3ac:	a0 e0       	ldi	r26, 0x00	; 0
+ 3ae:	b0 e0       	ldi	r27, 0x00	; 0
+ 3b0:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__data_start>
+ 3b4:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <__data_start+0x1>
+ 3b8:	a0 93 62 00 	sts	0x0062, r26	; 0x800062 <__data_start+0x2>
+ 3bc:	b0 93 63 00 	sts	0x0063, r27	; 0x800063 <__data_start+0x3>
+ 3c0:	08 95       	ret
+
+000003c2 <__divmodsi4>:
+ 3c2:	05 2e       	mov	r0, r21
+ 3c4:	97 fb       	bst	r25, 7
+ 3c6:	1e f4       	brtc	.+6      	; 0x3ce <__divmodsi4+0xc>
+ 3c8:	00 94       	com	r0
+ 3ca:	0e 94 f8 01 	call	0x3f0	; 0x3f0 <__negsi2>
+ 3ce:	57 fd       	sbrc	r21, 7
+ 3d0:	07 d0       	rcall	.+14     	; 0x3e0 <__divmodsi4_neg2>
+ 3d2:	0e 94 13 02 	call	0x426	; 0x426 <__udivmodsi4>
+ 3d6:	07 fc       	sbrc	r0, 7
+ 3d8:	03 d0       	rcall	.+6      	; 0x3e0 <__divmodsi4_neg2>
+ 3da:	4e f4       	brtc	.+18     	; 0x3ee <__divmodsi4_exit>
+ 3dc:	0c 94 f8 01 	jmp	0x3f0	; 0x3f0 <__negsi2>
+
+000003e0 <__divmodsi4_neg2>:
+ 3e0:	50 95       	com	r21
+ 3e2:	40 95       	com	r20
+ 3e4:	30 95       	com	r19
+ 3e6:	21 95       	neg	r18
+ 3e8:	3f 4f       	sbci	r19, 0xFF	; 255
+ 3ea:	4f 4f       	sbci	r20, 0xFF	; 255
+ 3ec:	5f 4f       	sbci	r21, 0xFF	; 255
+
+000003ee <__divmodsi4_exit>:
+ 3ee:	08 95       	ret
+
+000003f0 <__negsi2>:
+ 3f0:	90 95       	com	r25
+ 3f2:	80 95       	com	r24
+ 3f4:	70 95       	com	r23
+ 3f6:	61 95       	neg	r22
+ 3f8:	7f 4f       	sbci	r23, 0xFF	; 255
+ 3fa:	8f 4f       	sbci	r24, 0xFF	; 255
+ 3fc:	9f 4f       	sbci	r25, 0xFF	; 255
+ 3fe:	08 95       	ret
+
+00000400 <__muluhisi3>:
+ 400:	0e 94 35 02 	call	0x46a	; 0x46a <__umulhisi3>
+ 404:	a5 9f       	mul	r26, r21
+ 406:	90 0d       	add	r25, r0
+ 408:	b4 9f       	mul	r27, r20
+ 40a:	90 0d       	add	r25, r0
+ 40c:	a4 9f       	mul	r26, r20
+ 40e:	80 0d       	add	r24, r0
+ 410:	91 1d       	adc	r25, r1
+ 412:	11 24       	eor	r1, r1
+ 414:	08 95       	ret
+
+00000416 <__mulshisi3>:
+ 416:	b7 ff       	sbrs	r27, 7
+ 418:	0c 94 00 02 	jmp	0x400	; 0x400 <__muluhisi3>
+
+0000041c <__mulohisi3>:
+ 41c:	0e 94 00 02 	call	0x400	; 0x400 <__muluhisi3>
+ 420:	82 1b       	sub	r24, r18
+ 422:	93 0b       	sbc	r25, r19
+ 424:	08 95       	ret
+
+00000426 <__udivmodsi4>:
+ 426:	a1 e2       	ldi	r26, 0x21	; 33
+ 428:	1a 2e       	mov	r1, r26
+ 42a:	aa 1b       	sub	r26, r26
+ 42c:	bb 1b       	sub	r27, r27
+ 42e:	fd 01       	movw	r30, r26
+ 430:	0d c0       	rjmp	.+26     	; 0x44c <__udivmodsi4_ep>
+
+00000432 <__udivmodsi4_loop>:
+ 432:	aa 1f       	adc	r26, r26
+ 434:	bb 1f       	adc	r27, r27
+ 436:	ee 1f       	adc	r30, r30
+ 438:	ff 1f       	adc	r31, r31
+ 43a:	a2 17       	cp	r26, r18
+ 43c:	b3 07       	cpc	r27, r19
+ 43e:	e4 07       	cpc	r30, r20
+ 440:	f5 07       	cpc	r31, r21
+ 442:	20 f0       	brcs	.+8      	; 0x44c <__udivmodsi4_ep>
+ 444:	a2 1b       	sub	r26, r18
+ 446:	b3 0b       	sbc	r27, r19
+ 448:	e4 0b       	sbc	r30, r20
+ 44a:	f5 0b       	sbc	r31, r21
+
+0000044c <__udivmodsi4_ep>:
+ 44c:	66 1f       	adc	r22, r22
+ 44e:	77 1f       	adc	r23, r23
+ 450:	88 1f       	adc	r24, r24
+ 452:	99 1f       	adc	r25, r25
+ 454:	1a 94       	dec	r1
+ 456:	69 f7       	brne	.-38     	; 0x432 <__udivmodsi4_loop>
+ 458:	60 95       	com	r22
+ 45a:	70 95       	com	r23
+ 45c:	80 95       	com	r24
+ 45e:	90 95       	com	r25
+ 460:	9b 01       	movw	r18, r22
+ 462:	ac 01       	movw	r20, r24
+ 464:	bd 01       	movw	r22, r26
+ 466:	cf 01       	movw	r24, r30
+ 468:	08 95       	ret
+
+0000046a <__umulhisi3>:
+ 46a:	a2 9f       	mul	r26, r18
+ 46c:	b0 01       	movw	r22, r0
+ 46e:	b3 9f       	mul	r27, r19
+ 470:	c0 01       	movw	r24, r0
+ 472:	a3 9f       	mul	r26, r19
+ 474:	70 0d       	add	r23, r0
+ 476:	81 1d       	adc	r24, r1
+ 478:	11 24       	eor	r1, r1
+ 47a:	91 1d       	adc	r25, r1
+ 47c:	b2 9f       	mul	r27, r18
+ 47e:	70 0d       	add	r23, r0
+ 480:	81 1d       	adc	r24, r1
+ 482:	11 24       	eor	r1, r1
+ 484:	91 1d       	adc	r25, r1
+ 486:	08 95       	ret
+
+00000488 <_exit>:
+ 488:	f8 94       	cli
+
+0000048a <__stop_program>:
+ 48a:	ff cf       	rjmp	.-2      	; 0x48a <__stop_program>
